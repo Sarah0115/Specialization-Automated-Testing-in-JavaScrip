@@ -48,17 +48,29 @@ describe.only('Product Sorting', () => {
         const sortAscending = await $('option[value="price,asc"]')
         await sortAscending.click(); 
         
-        const priceValues = await $$('[data-test="product-price"]');
-        const priceElements = await $$('[data-test="product-price"]');
+        const container = await $('div.col-md-9 > div.container'); 
+        await browser.waitUntil(async () => {
+            const attrValue = await container.getAttribute('data-test');
+            return attrValue === 'sorting_completed'
+        }, {
+            timeout: 10000,
+            timeoutMsg: 'Sorting did not complete within timeout'
+        });
 
-       
+        const priceValues = await $$('[data-test="product-price"]');
+        const elementsPrices = [];
+
         for (const priceEl of priceValues) {
             const text = await priceEl.getText(); 
-            console.log('PPPRRRRRIIICCCEEESSS', text)
-         
-        
-        // const sortedPrices = [...priceValues].sort((a, b) => a - b);
-        // expect(priceValues).toEqual(sortedPrices);
+            const number = parseFloat(text.replace(/[^0-9.]/g, '')); // convert price string to number
+            elementsPrices.push(number);
+        }
+        const sortedPrices = [...elementsPrices].sort((a, b) => a - b);
+        expect(elementsPrices).toEqual(sortedPrices);
+
+
+
+
     });
 });
 
