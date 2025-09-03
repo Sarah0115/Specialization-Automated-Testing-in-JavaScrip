@@ -1,0 +1,4 @@
+{
+  "using": "xpath",
+  "value": ".//select[normalize-space(text()) = \"[data-test=\"sort\"]\"] | .//select[not(.//select[normalize-space(text()) = \"[data-test=\"sort\"]\"]) and normalize-space() = \"[data-test=\"sort\"]\"]"
+}

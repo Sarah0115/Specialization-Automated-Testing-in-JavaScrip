@@ -1,0 +1,4 @@
+{
+  "using": "css selector",
+  "value": "button[type=\"submit\" data-test=\"search-submit\"]"
+}
