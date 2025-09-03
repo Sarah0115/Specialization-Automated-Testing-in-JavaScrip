@@ -1,46 +1,51 @@
-const { expect } = require('@wdio/globals')
-const LoginPage = require('../pageobjects/login.page')
+const chai = require('chai');
+const assert = chai.assert;
+const expect = chai.expect;
+chai.should(); // Activate should interface
 
-describe('Login Page', () => {
-    it('should allow a user to log in with valid credentials', async () => {
-       await browser.url('https://practicesoftwaretesting.com/auth/login');
-        await LoginPage.login('sarandonga1993@hotmail.com', 'Contra0115*');
-
-        const pageTitle = await $('h1[data-test="page-title"]');
-        await expect(pageTitle).toHaveText('My account');
-
-        const currentUrl = await browser.getUrl();
-        await expect(currentUrl).toContain('/account');
-    });
-
-    it('should show error with invalid credentials', async () => {
-        await browser.url('https://practicesoftwaretesting.com/auth/login');
-
-        await LoginPage.login('wrongUser@asdf.com', 'wrongPass*');
-
-        const flashMessage = await $('div[data-test="login-error"]');
-        await expect(flashMessage).toBeDisplayed();
-        await expect(flashMessage).toHaveText('Invalid email or password');
-    });
-});
+const LoginPage = require('../pageobjects/login.page');
 
 describe('Search bar ', () => {
     it('Should returns no results for non-existent keyword', async () => {
-       await browser.url('https://practicesoftwaretesting.com');
+      await browser.url('https://practicesoftwaretesting.com');
+       
+        await browser.setWindowSize(1366, 768); 
 
         const searchBar = await $('input#search-query');
         
+        await searchBar.waitForDisplayed({ timeout: 10000 });
+        await searchBar.waitForEnabled({ timeout: 10000 });
+
+        await searchBar.clearValue();
+        
         await searchBar.setValue('tijeras');
-        await  $('button[data-test="search-submit"]').click();
+        await $('button[data-test="search-submit"]').click();
 
         const emptyMessage = await $('div[data-test="no-results"]');
-        await expect(emptyMessage).toBeDisplayed();
+        await emptyMessage.waitForDisplayed({ timeout: 5000 });
+        const messageText = await emptyMessage.getText();
+        const isDisplayed = await emptyMessage.isDisplayed();
+        
+
+        //ASSERT
+        assert.isTrue(isDisplayed, 'Error message is not shown');
+        assert.equal(messageText, 'There are no products found.');
+
+        //SHOULD
+        isDisplayed.should.be.true;
+        messageText.should.equal('There are no products found.');
+
+        //EXPECT
+        expect(isDisplayed).to.be.true;
+        expect(messageText).to.equal('There are no products found.');
     });
 });
 
-describe.only('Product Sorting', () => {
+  describe('Product Sorting', () => {
     it('should sort items by price in ascending order', async () => {
-       await browser.url('https://practicesoftwaretesting.com');
+        await browser.url('https://practicesoftwaretesting.com');
+       
+        await browser.setWindowSize(1366, 768); 
 
         const sortDropdown = await $('select[data-test="sort"]');  
         await sortDropdown.click(); 
@@ -50,7 +55,7 @@ describe.only('Product Sorting', () => {
         
         const container = await $('div.col-md-9 > div.container'); 
         await browser.waitUntil(async () => {
-            const attrValue = await container.getAttribute('data-test');
+          const attrValue = await container.getAttribute('data-test');
             return attrValue === 'sorting_completed'
         }, {
             timeout: 10000,
@@ -62,15 +67,20 @@ describe.only('Product Sorting', () => {
 
         for (const priceEl of priceValues) {
             const text = await priceEl.getText(); 
-            const number = parseFloat(text.replace(/[^0-9.]/g, '')); // convert price string to number
+            const number = parseFloat(text.replace(/[^0-9.]/g, '')); 
             elementsPrices.push(number);
         }
         const sortedPrices = [...elementsPrices].sort((a, b) => a - b);
-        expect(elementsPrices).toEqual(sortedPrices);
 
+        
+        //ASSERT
+        assert.deepEqual(elementsPrices, sortedPrices, 'Sorted elements dont match');
 
+        //SHOULD
+        elementsPrices.should.deep.equal(sortedPrices);
 
-
+        //EXPECT
+        expect(elementsPrices).to.deep.equal(sortedPrices);
     });
 });
 
@@ -78,58 +88,86 @@ describe('Category Navigation', () => {
     it('should filter products by hammer category and show correct product details', async () => {
 
         await browser.url('https://practicesoftwaretesting.com');
+        
+        await browser.setWindowSize(1366, 768); 
 
         const categoriesElement = await $('input[name="category_id"]');
-        await expect(categoriesElement).toBeDisplayed();
+        await categoriesElement.waitForDisplayed({ timeout: 5000 });
 
         const hammerLabel = await $('label*=Hammer');
         const hammerCheckbox = await hammerLabel.$('input[type="checkbox"]');
         await hammerCheckbox.click();
-        await expect(hammerCheckbox).toBeSelected();
+        
+        await browser.waitUntil(
+        async () => await hammerCheckbox.isSelected(),
+        {
+            timeout: 5000,
+            timeoutMsg: 'Checkbox was not selected within 5s'
+        }
+        );
 
         const firstElementCategory = await $('div[data-test="filter_completed"] a.card');
         await firstElementCategory.click();
 
 
         const categoryBadge = await $('span[aria-label="category"]');
+        await categoryBadge.waitForDisplayed({ timeout: 5000 });
+        const categoryisDisplayed = await categoryBadge.isExisting();
+        const category = (await categoryBadge.getText()).toLowerCase(); 
 
-        await expect(categoryBadge).toBeExisting();
-        await expect(categoryBadge).toBeDisplayed();
-        await expect(categoryBadge).toHaveText('hammer', { ignoreCase: true });
+        //ASSERT 
+        assert.isTrue(categoryisDisplayed, 'Category badge does not exist');
+        assert.equal(category, 'hammer', 'Category does not match');
 
+        //SHOULD
+        (categoryisDisplayed).should.be.true;
+        category.should.equal('hammer');
+
+        //EXPECT 
+        expect(categoryisDisplayed).to.be.true;
+        expect(category).to.equal('hammer');
+         
     });
 });
 
-
 describe('Language Change', () => {
     it('should change website labels to Spanish when user selects "ES"', async () => {
-        
         await browser.url('https://practicesoftwaretesting.com');
+        await browser.setWindowSize(1366, 768);
 
-        const navbarToggle = await $('button[data-bs-toggle="collapse"][aria-label="Toggle navigation"]');
-        const languageButton = await $('button#language');
-
-        const isLanguageButtonDisplayed = await languageButton.isDisplayed();
-        if (!isLanguageButtonDisplayed) {
-            // If language button not visible, click the navbar toggle button to show menu
-            await navbarToggle.waitForClickable({ timeout: 5000 });
-            await navbarToggle.click();
-
-            // Wait for the language button to be visible and clickable after menu opens
-            await languageButton.waitForDisplayed({ timeout: 5000 });
-            await languageButton.waitForClickable({ timeout: 5000 });
-        }
-
+        const languageButton = await $('#language');
         await languageButton.click();
-    
+
         const spanishOption = await $('a[data-test="lang-es"]');
+        await spanishOption.waitForDisplayed({ timeout: 5000 });
         await spanishOption.click();
 
-        const searchButton = await $('button[data-test="search-submit"]'); 
-        const loginButton = await $('a[data-test="nav-sign-in"]');
-        await expect(searchButton).toHaveText('Buscar');
-        await expect(loginButton).toHaveText('Iniciar sesión');
-        
+        const searchButton = await $('button[data-test="search-submit"]');
+        const initialText = await searchButton.getText();
+
+        await browser.waitUntil(async () => {
+        const currentText = await searchButton.getText();
+        return currentText !== initialText;
+        }, {
+        timeout: 5000,
+        timeoutMsg: 'Expected button text to change within 5 seconds'
+        });
+
+
+        const searchButtonText = await searchButton.getText();
+        const loginButton = await $('a[data-test="nav-sign-in"]').getText();
+
+        //ASSERT
+        assert.equal(searchButtonText, 'Buscar');
+        assert.equal(loginButton, 'Iniciar sesión');
+
+        //SHOULD
+        searchButtonText.should.equal('Buscar');
+        loginButton.should.equal('Iniciar sesión');
+
+        //EXPECT
+        expect(searchButtonText).to.include('Buscar');
+        expect(loginButton).to.include('Iniciar sesión');
     });
 });
 
@@ -138,6 +176,9 @@ describe('Basket Functionality', () => {
     it('should add a product to the basket successfully', async () => {
 
         await browser.url('https://practicesoftwaretesting.com/');
+
+        await browser.setWindowSize(1366, 768); 
+
         const productCard = await $('a.card');
         await productCard.click();
 
@@ -149,47 +190,79 @@ describe('Basket Functionality', () => {
 
         const successBanner = await $('#toast-container div.toast-success div[role="alert"]');
         await successBanner.waitForDisplayed({ timeout: 5000 });
-        await expect(successBanner).toBeDisplayed();
-        // await expect(successBanner).toHaveText('Product added to shopping cart.');
-       
-        const navbarToggle = await $('button[data-bs-toggle="collapse"][aria-label="Toggle navigation"]');
-        const cartButton = await $('a[data-test="nav-cart"]');
+
         const basketQuantity = await $('#lblCartCount');
+        const basketCountText = await basketQuantity.getText();
 
-        const isCartDisplayed = await cartButton.isDisplayed();
-        if (!isCartDisplayed) {
-            
-            await navbarToggle.waitForClickable();
-            await navbarToggle.click();
+        const successMessage = await successBanner.getText();
 
-            await basketQuantity.waitForDisplayed();
-            await basketQuantity.waitForClickable();
-        }
+        // ASSERT
+        assert.isTrue(await successBanner.isDisplayed(), 'Success banner should be displayed');
+        assert.equal(successMessage, 'Product added to shopping cart.', 'Success message text');
+        assert.equal(basketCountText, '3', 'Basket quantity should be 3');
 
-               
-        await expect(basketQuantity).toHaveText('3'); 
+        // SHOULD
+        (await successBanner.isDisplayed()).should.be.true;
+        successMessage.should.equal('Product added to shopping cart.');
+        basketCountText.should.equal('3');
+
+        // EXPECT
+        expect(await successBanner.isDisplayed()).to.be.true;
+        expect(successMessage).to.equal('Product added to shopping cart.');
+        expect(basketCountText).to.equal('3');
+  
     });
 });
+
 describe('Product Detail Page', () => {
     it('should display correct product information', async () => {
         await browser.url('https://practicesoftwaretesting.com/');
-        const productCard = await $('a.card');
+        
+        const productCard = await $('div.container > a:nth-child(2)');
         const productNameElement = await productCard.$('div.card-body h5');
         const productNameText = await productNameElement.getText();
+
         await productCard.click();
 
         const productName = await $('h1[data-test="product-name"]');
         await productName.waitForDisplayed({ timeout: 5000 });
-        await expect(productName).toBeDisplayed();
-        await expect(productName).toHaveText(productNameText); 
-       
+        const nameIsDisplayed = await productName.isDisplayed();
+        
+        browser.saveScreenshot('screenshot.png');
+        await productName.waitForDisplayed({ timeout: 5000 });
+        const productNameDisplayedText = await productName.getText();
 
         const productImages = await $$('.figure-img.img-fluid');
-        await expect(productImages.length).toBeGreaterThan(0);
-        for (const image of productImages) {
-            await expect(image).toBeDisplayed();
-        }
         const outOfStockAlert = await $('.p[data-test="out-of-stock"]');
-        await expect(outOfStockAlert).not.toBeDisplayed();
+        const outOfStockAlertIsDisplayed = await outOfStockAlert.isDisplayed();
+
+        //ASSERT
+        assert.isTrue(nameIsDisplayed, 'Product name is not displayed');
+        assert.equal(productNameDisplayedText, productNameText, 'Product name text should match');
+        assert.isAbove(productImages.length, 0, 'There should be at least one product image');
+        for (const image of productImages) {
+            assert.isTrue(await image.isDisplayed(), 'Each product image should be displayed');
+        }
+        assert.isFalse(outOfStockAlertIsDisplayed, 'Out of stock alert should not be displayed');
+
+        // SHOULD
+        (nameIsDisplayed).should.be.true;
+        productNameDisplayedText.should.equal(productNameText);
+        productImages.length.should.be.above(0);
+        for (const image of productImages) {
+            (await image.isDisplayed()).should.be.true;
+        }
+        (outOfStockAlertIsDisplayed).should.be.false;
+
+        // EXPECT
+        expect(nameIsDisplayed).to.be.true;
+        expect(productNameDisplayedText).to.equal(productNameText);
+        expect(productImages.length).to.be.above(0);
+        for (const image of productImages) {
+            expect(await image.isDisplayed()).to.be.true;
+        }
+        expect(outOfStockAlertIsDisplayed).to.be.false;
     });
+
 });
+

@@ -9,7 +9,6 @@ class LoginPage extends Page {
      * define selectors using getter methods
      */
     get inputEmail () {
-        //console.log( $('#email'), 'aaaaaaaaaaaaaaa')
         return $('input[type="email"]');
     }
 
@@ -26,6 +25,8 @@ class LoginPage extends Page {
      * e.g. to login using username and password
      */
     async login (username, password) {
+        
+        await this.inputEmail.waitForDisplayed();
         await this.inputEmail.setValue(username);
         await this.inputPassword.setValue(password);
         await this.btnSubmit.click();
