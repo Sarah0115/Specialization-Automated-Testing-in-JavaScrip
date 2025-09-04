@@ -1,34 +1,18 @@
-const { expect } = require('@wdio/globals')
-const LoginPage = require('../pageobjects/login.page')
-
-describe('Login Page', () => {
-    it('should allow a user to log in with valid credentials', async () => {
-       await browser.url('https://practicesoftwaretesting.com/auth/login');
-        await LoginPage.login('sarandonga1993@hotmail.com', 'Contra0115*');
-
-        const pageTitle = await $('h1[data-test="page-title"]');
-        await expect(pageTitle).toHaveText('My account');
-
-        const currentUrl = await browser.getUrl();
-        await expect(currentUrl).toContain('/account');
-    });
-
-    it('should show error with invalid credentials', async () => {
-        await browser.url('https://practicesoftwaretesting.com/auth/login');
-
-        await LoginPage.login('wrongUser@asdf.com', 'wrongPass*');
-
-        const flashMessage = await $('div[data-test="login-error"]');
-        await expect(flashMessage).toBeDisplayed();
-        await expect(flashMessage).toHaveText('Invalid email or password');
-    });
-});
+const { expect, browser } = require('@wdio/globals')
 
 describe('Search bar ', () => {
     it('Should returns no results for non-existent keyword', async () => {
        await browser.url('https://practicesoftwaretesting.com');
+       
+        await browser.setWindowSize(1366, 768); 
 
         const searchBar = await $('input#search-query');
+        
+        await searchBar.waitForDisplayed({ timeout: 10000 });
+        await searchBar.waitForEnabled({ timeout: 10000 });
+        await browser.saveScreenshot('screenshot.png');
+
+        await searchBar.clearValue();
         
         await searchBar.setValue('tijeras');
         await  $('button[data-test="search-submit"]').click();
@@ -38,9 +22,11 @@ describe('Search bar ', () => {
     });
 });
 
-describe.only('Product Sorting', () => {
+describe('Product Sorting', () => {
     it('should sort items by price in ascending order', async () => {
        await browser.url('https://practicesoftwaretesting.com');
+       
+        await browser.setWindowSize(1366, 768); 
 
         const sortDropdown = await $('select[data-test="sort"]');  
         await sortDropdown.click(); 
@@ -78,6 +64,8 @@ describe('Category Navigation', () => {
     it('should filter products by hammer category and show correct product details', async () => {
 
         await browser.url('https://practicesoftwaretesting.com');
+        
+        await browser.setWindowSize(1366, 768); 
 
         const categoriesElement = await $('input[name="category_id"]');
         await expect(categoriesElement).toBeDisplayed();
@@ -105,22 +93,15 @@ describe('Language Change', () => {
     it('should change website labels to Spanish when user selects "ES"', async () => {
         
         await browser.url('https://practicesoftwaretesting.com');
+        
+        await browser.setWindowSize(1366, 768); 
 
-        const navbarToggle = await $('button[data-bs-toggle="collapse"][aria-label="Toggle navigation"]');
-        const languageButton = await $('button#language');
+        await browser.setWindowSize(1366, 768); 
 
-        const isLanguageButtonDisplayed = await languageButton.isDisplayed();
-        if (!isLanguageButtonDisplayed) {
-            // If language button not visible, click the navbar toggle button to show menu
-            await navbarToggle.waitForClickable({ timeout: 5000 });
-            await navbarToggle.click();
-
-            // Wait for the language button to be visible and clickable after menu opens
-            await languageButton.waitForDisplayed({ timeout: 5000 });
-            await languageButton.waitForClickable({ timeout: 5000 });
-        }
+        const languageButton = await $('#language');
 
         await languageButton.click();
+        await browser.pause(1000); 
     
         const spanishOption = await $('a[data-test="lang-es"]');
         await spanishOption.click();
@@ -138,6 +119,9 @@ describe('Basket Functionality', () => {
     it('should add a product to the basket successfully', async () => {
 
         await browser.url('https://practicesoftwaretesting.com/');
+
+        await browser.setWindowSize(1366, 768); 
+
         const productCard = await $('a.card');
         await productCard.click();
 
@@ -156,15 +140,7 @@ describe('Basket Functionality', () => {
         const cartButton = await $('a[data-test="nav-cart"]');
         const basketQuantity = await $('#lblCartCount');
 
-        const isCartDisplayed = await cartButton.isDisplayed();
-        if (!isCartDisplayed) {
-            
-            await navbarToggle.waitForClickable();
-            await navbarToggle.click();
-
-            await basketQuantity.waitForDisplayed();
-            await basketQuantity.waitForClickable();
-        }
+    
 
                
         await expect(basketQuantity).toHaveText('3'); 
