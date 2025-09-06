@@ -10,7 +10,6 @@ describe('Search bar ', () => {
         
         await searchBar.waitForDisplayed({ timeout: 10000 });
         await searchBar.waitForEnabled({ timeout: 10000 });
-        await browser.saveScreenshot('screenshot.png');
 
         await searchBar.clearValue();
         
@@ -96,17 +95,24 @@ describe('Language Change', () => {
         
         await browser.setWindowSize(1366, 768); 
 
-        await browser.setWindowSize(1366, 768); 
-
         const languageButton = await $('#language');
-
         await languageButton.click();
-        await browser.pause(1000); 
-    
+
         const spanishOption = await $('a[data-test="lang-es"]');
+        await spanishOption.waitForDisplayed({ timeout: 5000 });
         await spanishOption.click();
 
-        const searchButton = await $('button[data-test="search-submit"]'); 
+        const searchButton = await $('button[data-test="search-submit"]');
+        const initialText = await searchButton.getText();
+
+        await browser.waitUntil(async () => {
+        const currentText = await languageButton.getText();
+        return currentText !== initialText; 
+        }, {
+        timeout: 5000,
+        timeoutMsg: 'Expected button text to change within 5 seconds'
+        })
+    
         const loginButton = await $('a[data-test="nav-sign-in"]');
         await expect(searchButton).toHaveText('Buscar');
         await expect(loginButton).toHaveText('Iniciar sesión');
@@ -134,7 +140,6 @@ describe('Basket Functionality', () => {
         const successBanner = await $('#toast-container div.toast-success div[role="alert"]');
         await successBanner.waitForDisplayed({ timeout: 5000 });
         await expect(successBanner).toBeDisplayed();
-        // await expect(successBanner).toHaveText('Product added to shopping cart.');
        
         const navbarToggle = await $('button[data-bs-toggle="collapse"][aria-label="Toggle navigation"]');
         const cartButton = await $('a[data-test="nav-cart"]');
