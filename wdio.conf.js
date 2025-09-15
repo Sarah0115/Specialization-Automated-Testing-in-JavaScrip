@@ -44,6 +44,7 @@ exports.config = {
     // from the same test should run tests.
     //
      maxInstances: 1,
+
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
@@ -58,6 +59,7 @@ exports.config = {
                 '--window-size=1566,968',
            ],
          },     
+
     },
 //     {
 //         browserName: 'firefox',
@@ -72,6 +74,7 @@ exports.config = {
 //            args: ['--headless']
 //      }   
 //   }
+
 ],
 
     //
@@ -133,10 +136,12 @@ exports.config = {
     
     //
     // The number of times to retry the entire specfile when it fails as a whole
+
     // specFileRetries: 2,
     //
     // Delay in seconds between the spec file retry attempts
     // specFileRetriesDelay: 0,
+
     //
     // Whether or not retried spec files should be retried immediately or deferred to the end of the queue
     // specFileRetriesDeferred: false,

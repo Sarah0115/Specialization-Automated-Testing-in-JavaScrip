@@ -7,8 +7,7 @@ const LoginPage = require('../pageobjects/login.page');
 
 describe('Search bar ', () => {
     it('Should returns no results for non-existent keyword', async () => {
-      await browser.url('https://practicesoftwaretesting.com');
-       
+      await browser.url('https://practicesoftwaretesting.com');       
         await browser.setWindowSize(1366, 768); 
 
         const searchBar = await $('input#search-query');
@@ -40,6 +39,7 @@ describe('Search bar ', () => {
         expect(messageText).to.equal('There are no products found.');
     });
 });
+
 
   describe('Product Sorting', () => {
     it('should sort items by price in ascending order', async () => {
@@ -133,8 +133,8 @@ describe('Category Navigation', () => {
 describe('Language Change', () => {
     it('should change website labels to Spanish when user selects "ES"', async () => {
         await browser.url('https://practicesoftwaretesting.com');
-        await browser.setWindowSize(1366, 768);
 
+        await browser.setWindowSize(1366, 768);
         const languageButton = await $('#language');
         await languageButton.click();
 
@@ -146,6 +146,7 @@ describe('Language Change', () => {
         const initialText = await searchButton.getText();
 
         await browser.waitUntil(async () => {
+
         const currentText = await searchButton.getText();
         return currentText !== initialText;
         }, {
@@ -191,8 +192,9 @@ describe('Basket Functionality', () => {
         const successBanner = await $('#toast-container div.toast-success div[role="alert"]');
         await successBanner.waitForDisplayed({ timeout: 5000 });
 
-        const basketQuantity = await $('#lblCartCount');
+      const basketQuantity = await $('#lblCartCount');
         const basketCountText = await basketQuantity.getText();
+
 
         const successMessage = await successBanner.getText();
 
