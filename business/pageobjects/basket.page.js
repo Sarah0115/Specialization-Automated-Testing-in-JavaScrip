@@ -21,7 +21,6 @@ class BasketPage extends Page {
         return $('#lblCartCount');
     }
 
-    // Basket/Product Actions
     async openFirstProduct() {
         await this.productCard.click();
     }

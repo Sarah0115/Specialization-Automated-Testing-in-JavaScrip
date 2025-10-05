@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier --write .",
-        "wdio": "wdio run ./wdio.conf.js"
+        "wdio": "wdio run ./wdio.conf.js",
+        "api:test": "mocha test/api/**/*.spec.js --timeout 10000"
     },
     "keywords": [],
     "author": "",
@@ -19,7 +20,11 @@
         "@wdio/mocha-framework": "^9.19.2",
         "@wdio/spec-reporter": "^9.19.2",
         "@wdio/visual-service": "^9.0.0",
-        "chai": "^6.0.1",
+        "chai": "^6.2.0",
         "prettier": "^3.6.2"
+    },
+    "dependencies": {
+        "joi": "^18.0.1",
+        "supertest": "^7.1.4"
     }
 }

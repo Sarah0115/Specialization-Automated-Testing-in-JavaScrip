@@ -5,7 +5,6 @@ class CategoryPage extends Page {
         return super.open('/');
     }
 
-    // Selectors
     get categoriesElement() {
         return $('input[name="category_id"]');
     }
@@ -22,7 +21,6 @@ class CategoryPage extends Page {
         return $('span[aria-label="category"]');
     }
 
-    // Actions
     async selectHammerCategory() {
         await this.waitForShow(this.categoriesElement);
         await this.hammerCheckbox.click();
