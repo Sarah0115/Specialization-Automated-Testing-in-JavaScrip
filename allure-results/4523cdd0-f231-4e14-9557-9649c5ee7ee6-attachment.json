@@ -1,4 +1,0 @@
-{
-  "using": "xpath",
-  "value": ".//data-test[normalize-space(text()) = \"\"product-price\"]\"] | .//data-test[not(.//data-test[normalize-space(text()) = \"\"product-price\"]\"]) and normalize-space() = \"\"product-price\"]\"]"
-}

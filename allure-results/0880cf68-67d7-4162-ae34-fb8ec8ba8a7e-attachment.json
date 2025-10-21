@@ -1,4 +1,0 @@
-{
-  "using": "css selector",
-  "value": "h1[data-test=\"page-title\"]"
-}

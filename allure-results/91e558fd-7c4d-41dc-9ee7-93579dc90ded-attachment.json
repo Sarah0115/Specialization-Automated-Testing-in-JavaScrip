@@ -1,4 +1,0 @@
-{
-  "using": "css selector",
-  "value": ".:nth-child(3) > div.col-md-9 > div.container"
-}

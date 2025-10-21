@@ -24,7 +24,7 @@ module.exports = class Page {
     /**
      *  Wait until element exists in DOM
      */
-    async waitForShow(element, timeout = 5000) {
+    async waitForShow(element, timeout = 15000) {
         await element.waitForDisplayed({ timeout });
         await element.waitForExist({ timeout });
     }

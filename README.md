@@ -5,3 +5,4 @@ In this project I have the solutions to the task for the course so far they are 
 - Main --> Module 4 WedDriver IO
 - module-5-Chai --> Module 5 Mocha and Chai
 - api-testing --> Module 8 Testing WebServices
+- reporting --> Module 10 Results Reporting
