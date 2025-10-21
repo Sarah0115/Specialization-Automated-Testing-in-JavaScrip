@@ -7,10 +7,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier --write .",
         "wdio": "wdio run ./wdio.conf.js",
-        "test:ui": "wdio run ./wdio.conf.js",
-        "report:allure:generate": "allure generate \"reports/allure-results\" --clean -o \"reports/allure-report\"",
-        "report:allure:open": "allure open \"reports/allure-report\"",
-        "test:ui:report": "npm run test:ui && npm run report:allure:generate && npm run report:allure:open"
+        "test:ui": "wdio run ./wdio.conf.js"
     },
     "keywords": [],
     "author": "",
@@ -23,7 +20,6 @@
         "@wdio/mocha-framework": "^9.19.2",
         "@wdio/spec-reporter": "^9.19.2",
         "@wdio/visual-service": "^9.0.0",
-        "allure-commandline": "^2.34.1",
         "chai": "^6.2.0",
         "prettier": "^3.6.2"
     },

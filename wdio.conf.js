@@ -20,8 +20,8 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/specs/**/*.js'], 
-    //, './test/api/**/*.spec.js' 
+    specs: ['./test/specs/**/*.js'],
+    //, './test/api/**/*.spec.js'
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -148,26 +148,25 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: [
-    [
-        'spec',
-        {
-        symbols: {
-            passed: '[PASS 💚]',
-            failed: '[FAIL 💥]',
-        },
-        },
+        [
+            'spec',
+            {
+                symbols: {
+                    passed: '[PASS 💚]',
+                    failed: '[FAIL 💥]',
+                },
+            },
+        ],
+        [
+            'allure',
+            {
+                outputDir: 'reports/allure-results',
+                disableWebdriverStepsReporting: false,
+                disableWebdriverScreenshotsReporting: false,
+                addConsoleLogs: true,
+            },
+        ],
     ],
-    [
-        'allure',
-        {
-        outputDir: 'reports/allure-results',   // ← resultados crudos
-        disableWebdriverStepsReporting: false,
-        disableWebdriverScreenshotsReporting: false,
-        addConsoleLogs: true
-        },
-    ],
-    ],
-
 
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -276,7 +275,9 @@ exports.config = {
         { error, result, duration, passed, retries }
     ) {
         if (!passed || error) {
-            await browser.saveScreenshot(`./reports/allure-results/${Date.now()}-${test.title}.png`);
+            await browser.saveScreenshot(
+                `./reports/allure-results/${Date.now()}-${test.title}.png`
+            );
         }
     },
 
