@@ -1,2 +1,7 @@
 node_modules
 allure-results
+# Reportes
+reports/html-reports/
+reports/
+allure-report/
+allure-results/

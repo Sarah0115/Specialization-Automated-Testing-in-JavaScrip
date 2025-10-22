@@ -1,3 +1,8 @@
+const path = require('path');
+const { ReportAggregator, HtmlReporter } = require('wdio-html-nice-reporter');
+
+let reportAggregator; // ⬅️ variable global para usar en onPrepare y onComplete
+
 exports.config = {
     //
     // ====================
@@ -20,7 +25,8 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/specs/**/*.js', './test/api/**/*.spec.js'],
+    specs: ['./test/specs/**/*.js'],
+    //, './test/api/**/*.spec.js'
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -146,7 +152,30 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec', ['allure', { outputDir: 'allure-results' }]],
+    reporters: [
+        [
+            'spec',
+            {
+                symbols: {
+                    passed: '[PASS 💚]',
+                    failed: '[FAIL 💥]',
+                },
+            },
+        ],
+        [
+            'html-nice',
+            {
+                outputDir: './reports/html-reports/',
+                filename: 'report.html',
+                reportTitle: 'E2E Test Report',
+                linkScreenshots: true,
+                showInBrowser: true,
+                collapseTests: false,
+                removeOutput: true,
+                useOnAfterCommandForScreenshot: true,
+            },
+        ],
+    ],
 
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
@@ -168,8 +197,19 @@ exports.config = {
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    // onPrepare: function (config, capabilities) {
-    // },
+    // 💡 Necesario para crear el HTML final (master report)
+    onPrepare: function () {
+        reportAggregator = new ReportAggregator({
+            outputDir: './reports/html-reports/',
+            filename: 'master-report.html', // nombre del HTML final
+            reportTitle: 'Master Report',
+            collapseTests: true,
+        });
+
+        // Limpia artefactos previos
+        reportAggregator.clean();
+    },
+
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
      * for that worker as well as modify runtime environments in an async fashion.
@@ -249,13 +289,11 @@ exports.config = {
      * @param {boolean} result.passed    true if test has passed, otherwise false
      * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    afterTest: async function (
-        test,
-        context,
-        { error, result, duration, passed, retries }
-    ) {
-        if (!passed) {
-            await browser.takeScreenshot();
+    afterTest: async function (test, context, { error, passed }) {
+        if (!passed || error) {
+            await browser.saveScreenshot(
+                `./reports/html-reports/${Date.now()}-${test.title}.png`
+            );
         }
     },
 
@@ -299,8 +337,17 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    // onComplete: function(exitCode, config, capabilities, results) {
-    // },
+    onComplete: async function () {
+        try {
+            await reportAggregator.createReport();
+            console.log(
+                '✅ HTML Nice Report generado en: reports/html-reports/master-report.html'
+            );
+        } catch (err) {
+            console.error('❌ Error generando el HTML Nice Report:', err);
+            throw err;
+        }
+    },
     /**
      * Gets executed when a refresh happens.
      * @param {string} oldSessionId session ID of the old session

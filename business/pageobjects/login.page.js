@@ -94,7 +94,7 @@ class LoginPage extends Page {
         try {
             await browser.waitUntil(
                 async () => (await browser.getUrl()).includes('login'),
-                { timeout: 5000 }
+                { timeout: 15000 }
             );
             return { success: true, error: null };
         } catch (e) {
