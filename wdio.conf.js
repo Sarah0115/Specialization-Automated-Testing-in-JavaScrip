@@ -1,3 +1,8 @@
+const path = require('path');
+const { ReportAggregator, HtmlReporter } = require('wdio-html-nice-reporter');
+
+let reportAggregator; // ⬅️ variable global para usar en onPrepare y onComplete
+
 exports.config = {
     //
     // ====================
@@ -158,12 +163,16 @@ exports.config = {
             },
         ],
         [
-            'allure',
+            'html-nice',
             {
-                outputDir: 'reports/allure-results',
-                disableWebdriverStepsReporting: false,
-                disableWebdriverScreenshotsReporting: false,
-                addConsoleLogs: true,
+                outputDir: './reports/html-reports/',
+                filename: 'report.html',
+                reportTitle: 'E2E Test Report',
+                linkScreenshots: true,
+                showInBrowser: true,
+                collapseTests: false,
+                removeOutput: true,
+                useOnAfterCommandForScreenshot: true,
             },
         ],
     ],
@@ -188,8 +197,19 @@ exports.config = {
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    // onPrepare: function (config, capabilities) {
-    // },
+    // 💡 Necesario para crear el HTML final (master report)
+    onPrepare: function () {
+        reportAggregator = new ReportAggregator({
+            outputDir: './reports/html-reports/',
+            filename: 'master-report.html', // nombre del HTML final
+            reportTitle: 'Master Report',
+            collapseTests: true,
+        });
+
+        // Limpia artefactos previos
+        reportAggregator.clean();
+    },
+
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
      * for that worker as well as modify runtime environments in an async fashion.
@@ -269,14 +289,10 @@ exports.config = {
      * @param {boolean} result.passed    true if test has passed, otherwise false
      * @param {object}  result.retries   information about spec related retries, e.g. `{ attempts: 0, limit: 0 }`
      */
-    afterTest: async function (
-        test,
-        context,
-        { error, result, duration, passed, retries }
-    ) {
+    afterTest: async function (test, context, { error, passed }) {
         if (!passed || error) {
             await browser.saveScreenshot(
-                `./reports/allure-results/${Date.now()}-${test.title}.png`
+                `./reports/html-reports/${Date.now()}-${test.title}.png`
             );
         }
     },
@@ -321,8 +337,17 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    // onComplete: function(exitCode, config, capabilities, results) {
-    // },
+    onComplete: async function () {
+        try {
+            await reportAggregator.createReport();
+            console.log(
+                '✅ HTML Nice Report generado en: reports/html-reports/master-report.html'
+            );
+        } catch (err) {
+            console.error('❌ Error generando el HTML Nice Report:', err);
+            throw err;
+        }
+    },
     /**
      * Gets executed when a refresh happens.
      * @param {string} oldSessionId session ID of the old session
