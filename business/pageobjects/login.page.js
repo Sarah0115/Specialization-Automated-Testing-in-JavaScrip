@@ -98,6 +98,7 @@ class LoginPage extends Page {
             );
             return { success: true, error: null };
         } catch (e) {
+            console.error('Login error:', e.message);
             if (await this.duplicateEmailError.isDisplayed()) {
                 const message = await this.duplicateEmailError.getText();
                 return { success: false, error: message };

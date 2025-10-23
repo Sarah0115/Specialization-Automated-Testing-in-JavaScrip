@@ -1,5 +1,4 @@
-const path = require('path');
-const { ReportAggregator, HtmlReporter } = require('wdio-html-nice-reporter');
+const { ReportAggregator } = require('wdio-html-nice-reporter');
 
 let reportAggregator; // ⬅️ variable global para usar en onPrepare y onComplete
 
