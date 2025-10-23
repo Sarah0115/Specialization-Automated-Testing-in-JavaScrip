@@ -12,8 +12,9 @@ async function timed(cb) {
     return res;
 }
 
-describe('Booking API - DELETE', () => {
-    before(async () => {
+describe('Booking API - DELETE', function () {
+    this.timeout(15000);
+    before(async function () {
         const chai = await import('chai');
         expect = chai.expect;
         const joiModule = await import('joi');
