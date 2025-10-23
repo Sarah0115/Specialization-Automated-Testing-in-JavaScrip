@@ -5,12 +5,14 @@ Each module is organized in its own branch, following the learning path through 
 
 ## Branch Overview
 
-| **Branch Name**      | **Module / Topic**                        | **Description**                                                                    |
-| -------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------- |
-| 🧭 **main**          | **Module 4 — WebDriverIO**                | UI test automation using the WebDriverIO framework.                                |
-| 🧪 **module-5-chai** | **Module 5 — Mocha & Chai**               | Implementation of assertion libraries and test organization using Mocha and Chai.  |
-| 🔗 **api-testing**   | **Module 8 — API / Web Services Testing** | REST API testing with SuperTest and Axios, including schema validation with Joi.   |
-| 📊 **reporting**     | **Module 10 — Test Results & Reporting**  | Integration of Spec and HTML Nice Reporter for structured and visual test reports. |
+| **Branch Name**           | **Module / Topic**                        | **Description**                                                                                                                                                         |
+| ------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🧭 **main**               | **Module 4 — WebDriverIO**                | UI test automation using the WebDriverIO framework.                                                                                                                     |
+| 🧪 **module-5-chai**      | **Module 5 — Mocha & Chai**               | Implementation of assertion libraries and test organization using Mocha and Chai.                                                                                       |
+| 🚂 **module-6-framework** | **Module 6 — Automation Framework**       | Organization of main layers on the project.                                                                                                                             |
+| 🔗 **api-testing**        | **Module 8 — API / Web Services Testing** | REST API testing with SuperTest and Axios, including schema validation with Joi.                                                                                        |
+| 📊 **reporting**          | **Module 10 — Test Results & Reporting**  | Integration of Spec and HTML Nice Reporter for structured and visual test reports.                                                                                      |
+| 🧹 **quality-gates**      | **Module 11 — Code Quality & Linters**    | Configuration and integration of Prettier and ESLint for code style enforcement, including CI job setup to automatically run linters before UI and API test executions. |
 
 ### Tech Stack
 
