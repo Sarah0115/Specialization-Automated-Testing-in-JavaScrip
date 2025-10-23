@@ -8,8 +8,10 @@
         "format": "prettier --write .",
         "wdio": "wdio run ./wdio.conf.js",
         "test:ui": "wdio run ./wdio.conf.js",
-        "test:api": "mocha ./test/api/**/*.spec.js"
-    },
+        "test:api": "mocha \"test/api/**/*.spec.js\" --timeout 15000 --reporter mochawesome --reporter-options reportDir=reports/api/mochawesome,reportFilename=api,quiet=true,overwrite=true,html=false,json=true",
+        "ui:report": "wdio run ./wdio.conf.js && start \"\" \"reports\\html-reports\\master-report.html\"",
+        "api:report": "mocha \"test/api/**/*.spec.js\" --timeout 15000 --reporter mochawesome --reporter-options reportDir=reports/api/mochawesome,reportFilename=api,quiet=true,overwrite=true,html=false,json=true && npx mochawesome-merge \"reports/api/mochawesome/*.json\" -o \"reports/api/mochawesome/mochawesome.json\" && npx marge \"reports/api/mochawesome/mochawesome.json\" -o \"reports/api/html\" -f index && start \"\" \"reports\\api\\html\\index.html\""
+        },
     "keywords": [],
     "author": "",
     "license": "ISC",
@@ -22,6 +24,9 @@
         "@wdio/spec-reporter": "^9.20.0",
         "@wdio/visual-service": "^9.0.0",
         "chai": "^6.2.0",
+        "mochawesome": "^7.1.4",
+        "mochawesome-merge": "^4.4.1",
+        "mochawesome-report-generator": "^6.3.0",
         "prettier": "^3.6.2",
         "wdio-html-nice-reporter": "^8.1.7"
     },
