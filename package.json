@@ -6,9 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier --write .",
-        "wdio": "wdio run ./wdio.conf.js",
-        "test:ui": "wdio run ./wdio.conf.js",
-        "test:api": "mocha \"test/api/**/*.spec.js\" --timeout 15000 --reporter mochawesome --reporter-options reportDir=reports/api/mochawesome,reportFilename=api,quiet=true,overwrite=true,html=false,json=true",
+        "test:ui": "npx wdio run ./wdio.conf.js",
+        "test:api": "npx mocha 'test/api/**/*.spec.js' --timeout 15000 --reporter spec",
         "ui:report": "wdio run ./wdio.conf.js && start \"\" \"reports\\html-reports\\master-report.html\"",
         "api:report": "mocha \"test/api/**/*.spec.js\" --timeout 15000 --reporter mochawesome --reporter-options reportDir=reports/api/mochawesome,reportFilename=api,quiet=true,overwrite=true,html=false,json=true && npx mochawesome-merge \"reports/api/mochawesome/*.json\" -o \"reports/api/mochawesome/mochawesome.json\" && npx marge \"reports/api/mochawesome/mochawesome.json\" -o \"reports/api/html\" -f index && start \"\" \"reports\\api\\html\\index.html\""
         },
