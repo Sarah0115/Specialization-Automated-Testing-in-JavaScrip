@@ -9,12 +9,9 @@ pipeline {
 
         stage('Test UI') {
             steps {
-                echo 'Corriendo pruebas UI...'
+                echo 'Execute UI test...'
                 bat '''
-                    echo Instalando dependencias...
                     npm install
-
-                    echo Ejecutando tests de UI...
                     npm run ui:report
                 '''
             }
@@ -22,9 +19,8 @@ pipeline {
 
         stage('Test API') {
             steps {
-                echo 'Corriendo pruebas API...'
+                echo 'Execute API test...'
                 bat '''
-                    echo Ejecutando tests de API...
                     npm install
                     npm run api:report
                 '''
@@ -34,13 +30,13 @@ pipeline {
 
     post {
         success {
-            echo 'Todas las pruebas se ejecutaron correctamente.'
+            echo 'Successful execution'
         }
         failure {
-            echo 'Error detectado en alguna etapa de la pipeline.'
+            echo 'Error.'
         }
         always {
-            echo 'Limpiando workspace...'
+            echo 'Workspace wiping out...'
             cleanWs()
         }
     }
