@@ -6,7 +6,26 @@ pipeline {
     }
 
     stages {
-
+           
+        stage('Linter') {
+            steps {
+                echo 'Running ESlint'
+                bat '''
+                        npm install
+                        npm run lint
+                    '''
+            }
+        }
+         stage('Prettier') {
+            steps {
+                echo 'Running Prettier'
+                bat '''
+                        npm install
+                        npm run format
+                    '''
+            }
+        }
+    
         stage('Test UI') {
             steps {
                 echo 'Execute UI test...'

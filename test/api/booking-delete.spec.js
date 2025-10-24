@@ -1,5 +1,4 @@
 let expect;
-let Joi;
 let request;
 
 const BASIC = 'Basic ' + Buffer.from('admin:password123').toString('base64');
@@ -17,8 +16,6 @@ describe('Booking API - DELETE', function () {
     before(async function () {
         const chai = await import('chai');
         expect = chai.expect;
-        const joiModule = await import('joi');
-        Joi = joiModule.default;
         request = (await import('supertest')).default(
             'https://restful-booker.herokuapp.com'
         );
