@@ -6,7 +6,6 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "format": "prettier --write .",
-        "wdio": "wdio run ./wdio.conf.js",
         "test:ui": "wdio run ./wdio.conf.js",
         "test:api": "mocha \"test/api/**/*.spec.js\" --timeout 15000 --reporter mochawesome --reporter-options reportDir=reports/api/mochawesome,reportFilename=api,quiet=true,overwrite=true,html=false,json=true",
         "ui:report": "wdio run ./wdio.conf.js && start \"\" \"reports\\html-reports\\master-report.html\"",
