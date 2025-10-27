@@ -1,4 +1,4 @@
-const LanguagePage = require('../../business/pageobjects/language.page');
+const LanguagePage = require('../../../business/pageobjects/language.page');
 const { expect } = require('chai');
 
 describe('Language Change', () => {

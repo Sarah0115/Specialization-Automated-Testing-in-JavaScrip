@@ -1,4 +1,4 @@
-const SearchPage = require('../../business/pageobjects/search.page');
+const SearchPage = require('../../../business/pageobjects/search.page');
 const { expect } = require('chai');
 
 describe('Search bar', () => {

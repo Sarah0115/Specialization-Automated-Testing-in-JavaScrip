@@ -1,4 +1,4 @@
-const SortPage = require('../../business/pageobjects/sorting.page');
+const SortPage = require('../../../business/pageobjects/sorting.page');
 const { expect } = require('chai');
 
 describe('Product Sorting', () => {

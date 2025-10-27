@@ -24,7 +24,7 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/specs/**/*.js'],
+    specs: ['./test/ui/cucumber/**/*.js'],
     //, './test/api/**/*.spec.js'
     // Patterns to exclude.
     exclude: [
@@ -165,8 +165,8 @@ exports.config = {
             'html-nice',
             {
                 outputDir: './reports/html-reports/',
-                filename: 'report.html',
-                reportTitle: 'E2E Test Report',
+                filename: 'report-cucumber.html',
+                reportTitle: 'E2E Test Report Cucumber',
                 linkScreenshots: true,
                 showInBrowser: true,
                 collapseTests: false,
@@ -200,8 +200,8 @@ exports.config = {
     onPrepare: function () {
         reportAggregator = new ReportAggregator({
             outputDir: './reports/html-reports/',
-            filename: 'master-report.html', // nombre del HTML final
-            reportTitle: 'Master Report',
+            filename: 'master-report-cucubumer.html', // nombre del HTML final
+            reportTitle: 'Master Report Cucumber',
             collapseTests: true,
         });
 
@@ -340,7 +340,7 @@ exports.config = {
         try {
             await reportAggregator.createReport();
             console.log(
-                '✅ HTML Nice Report generado en: reports/html-reports/master-report.html'
+                '✅ HTML Nice Report generado en: reports/html-reports/master-report-cucumber.html'
             );
         } catch (err) {
             console.error('❌ Error generando el HTML Nice Report:', err);

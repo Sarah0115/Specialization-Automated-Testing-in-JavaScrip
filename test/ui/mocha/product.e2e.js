@@ -1,4 +1,4 @@
-const ProductPage = require('../../business/pageobjects/product.page');
+const ProductPage = require('../../../business/pageobjects/product.page');
 const { expect } = require('chai');
 
 describe('Product Detail Page', () => {

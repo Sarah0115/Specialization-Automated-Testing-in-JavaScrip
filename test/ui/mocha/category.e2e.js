@@ -1,4 +1,4 @@
-const CategoryPage = require('../../business/pageobjects/Category.page');
+const CategoryPage = require('../../../business/pageobjects/Category.page');
 const { expect } = require('chai');
 
 describe('Category Navigation', () => {
