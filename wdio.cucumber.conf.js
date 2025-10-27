@@ -1,7 +1,3 @@
-const { ReportAggregator } = require('wdio-html-nice-reporter');
-
-let reportAggregator; // ⬅️ variable global para usar en onPrepare y onComplete
-
 exports.config = {
     //
     // ====================
@@ -24,8 +20,7 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/ui/cucumber/**/*.js'],
-    //, './test/api/**/*.spec.js'
+    specs: ['./test/ui/cucumber/features/**/*.feature'],
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -134,7 +129,7 @@ exports.config = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
-    framework: 'mocha',
+    framework: 'cucumber',
 
     //
     // The number of times to retry the entire specfile when it fails as a whole
@@ -176,10 +171,9 @@ exports.config = {
         ],
     ],
 
-    // Options to be passed to Mocha.
-    // See the full list at http://mochajs.org/
-    mochaOpts: {
-        ui: 'bdd',
+    // Options to be passed to Cucumber.
+    cucumberOpts: {
+        require: ['./test/ui/cucumber/steps/**/*.js'],
         timeout: 60000,
     },
 
@@ -197,17 +191,7 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      */
     // 💡 Necesario para crear el HTML final (master report)
-    onPrepare: function () {
-        reportAggregator = new ReportAggregator({
-            outputDir: './reports/html-reports/',
-            filename: 'master-report-cucubumer.html', // nombre del HTML final
-            reportTitle: 'Master Report Cucumber',
-            collapseTests: true,
-        });
-
-        // Limpia artefactos previos
-        reportAggregator.clean();
-    },
+    //  onPrepare: function () {}
 
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -336,17 +320,7 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    onComplete: async function () {
-        try {
-            await reportAggregator.createReport();
-            console.log(
-                '✅ HTML Nice Report generado en: reports/html-reports/master-report-cucumber.html'
-            );
-        } catch (err) {
-            console.error('❌ Error generando el HTML Nice Report:', err);
-            throw err;
-        }
-    },
+
     /**
      * Gets executed when a refresh happens.
      * @param {string} oldSessionId session ID of the old session
