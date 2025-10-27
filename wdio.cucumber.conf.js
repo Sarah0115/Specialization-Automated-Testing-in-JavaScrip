@@ -173,7 +173,7 @@ exports.config = {
 
     // Options to be passed to Cucumber.
     cucumberOpts: {
-        require: ['./test/ui/cucumber/steps/**/*.js'],
+        require: ['test/ui/cucumber/steps/**/*.js'],
         timeout: 60000,
     },
 
