@@ -4,6 +4,7 @@ const { expect } = require('chai');
 describe('Language Change', () => {
     it('should change website labels to Spanish when user selects "ES"', async () => {
         await LanguagePage.open();
+        await LanguagePage.openLanguageMenu();
         await LanguagePage.changeLanguageToSpanish();
 
         const searchButtonText = await LanguagePage.getSearchButtonText();

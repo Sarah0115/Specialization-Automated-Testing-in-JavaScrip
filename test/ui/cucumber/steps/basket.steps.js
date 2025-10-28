@@ -1,26 +1,31 @@
-// import { Given, When, Then } from '@wdio/cucumber-framework';
-// import BasketPage from '../../../../business/pageobjects/basket.page';
-// import { expect } from 'chai';
+const { When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const BasketPage = require('../../../../business/pageobjects/basket.page');
 
-// Given('I am on the home page', async () => {
-//     await BasketPage.open();
-// });
+When('the user opens the first product', async () => {
+    await BasketPage.openFirstProduct();
+});
 
-// When('I open the first product', async () => {
-//     await BasketPage.openFirstProduct();
-// });
+When('the user sets the quantity to {int}', async (quantity) => {
+    await BasketPage.quantityInput.setValue(quantity);
+});
 
-// When('I add {int} items to the basket', async (quantity) => {
-//     await BasketPage.addToBasket(quantity);
-// });
+When('the user clicks the "Add to Cart" button', async () => {
+    await BasketPage.addToCartButton.waitForClickable({ timeout: 5000 });
+    await BasketPage.addToCartButton.click();
+    await BasketPage.waitForShow(BasketPage.successBanner);
+});
 
-// Then('I should see a success message {string}', async (expectedMessage) => {
-//     const actualMessage = await BasketPage.getSuccessMessage();
-//     expect(actualMessage).to.equal(expectedMessage);
-//     expect(await BasketPage.isSuccessBannerDisplayed()).to.be.true;
-// });
+Then('the success banner should be displayed', async () => {
+    expect(await BasketPage.isSuccessBannerDisplayed()).to.be.true;
+});
 
-// Then('the basket count should be {string}', async (expectedCount) => {
-//     const actualCount = await BasketPage.getBasketCount();
-//     expect(actualCount).to.equal(expectedCount);
-// });
+Then('the success message should be {string}', async (expectedMessage) => {
+    const actualMessage = await BasketPage.getSuccessMessage();
+    expect(actualMessage).to.equal(expectedMessage);
+});
+
+Then('the basket should show a quantity of {int}', async (expectedQuantity) => {
+    const basketCount = await BasketPage.getBasketCount();
+    expect(basketCount).to.equal(expectedQuantity.toString());
+});

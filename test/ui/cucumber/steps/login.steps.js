@@ -1,29 +1,29 @@
-import { Given, When, Then } from '@wdio/cucumber-framework';
-import { expect } from 'chai';
-import LoginPage from '../../../../business/pageobjects/login.page';
+const { Before, Given, When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const LoginPage = require('../../../../business/pageobjects/login.page');
 
+let validUser;
 
-const validUser = {
-    firstName: 'Amy',
-    lastName: 'Lee',
-    dob: '1953-01-13',
-    street: '123 Main St',
-    postalCode: '12345',
-    city: 'Anytown',
-    state: 'Anystate',
-    country: 'US',
-    phone: '1234567890',
-    email: 'amylee12345@example.com',
-    password: 'StrongP@ssw0rd!',
-};
-
-// Background step
+Before(async function () {
+    validUser = {
+        firstName: 'Amy',
+        lastName: 'Lee',
+        dob: '1953-01-13',
+        street: '123 Main St',
+        postalCode: '12345',
+        city: 'Anytown',
+        state: 'Anystate',
+        country: 'US',
+        phone: '1234567890',
+        email: 'amylee12345@example.com',
+        password: 'StrongP@ssw0rd!',
+    };
+});
 Given('the user has registered successfully', async () => {
     await LoginPage.open('register');
     await LoginPage.registerUser(validUser);
 });
 
-// Scenario: Successful login
 Given('the user is on the login page', async () => {
     await LoginPage.open('login');
 });
