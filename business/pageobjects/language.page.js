@@ -18,9 +18,12 @@ class LanguagePage extends Page {
         return $('a[data-test="nav-sign-in"]');
     }
 
-    async changeLanguageToSpanish() {
+    async openLanguageMenu() {
         await this.languageButton.click();
         await this.waitForShow(this.spanishOption);
+    }
+
+    async changeLanguageToSpanish() {
         await this.spanishOption.click();
 
         const initialText = await this.searchButton.getText();

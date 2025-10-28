@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import SearchPage from '../../../../business/pageobjects/search.page';
 
 Given('the user is on the homepage', async () => {
-    console.log('🟡 Inside Given — running step!');
     await SearchPage.open('/');
 });
 

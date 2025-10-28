@@ -164,9 +164,9 @@ exports.config = {
                 reportTitle: 'E2E Test Report Cucumber',
                 linkScreenshots: true,
                 showInBrowser: true,
-                collapseTests: false,
+                collapseTests: true,
                 removeOutput: true,
-                useOnAfterCommandForScreenshot: true,
+                useOnAfterCommandForScreenshot: false,
             },
         ],
     ],
@@ -286,6 +286,15 @@ exports.config = {
      */
     // afterSuite: function (suite) {
     // },
+    afterStep: async function ({ passed }) {
+        if (!passed) {
+            const timestamp = new Date().toISOString().replace(/:/g, '-');
+            await browser.saveScreenshot(
+                `./reports/html-reports/screenshots/error-${timestamp}.png`
+            );
+        }
+    },
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {string} commandName hook command name
