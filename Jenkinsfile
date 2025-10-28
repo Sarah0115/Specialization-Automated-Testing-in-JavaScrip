@@ -10,26 +10,29 @@ pipeline {
         stage('Linter') {
             steps {
                 echo 'Running ESlint'
-                bat 'npm run install'
-                bat 'npm run run lint'            
+                bat 'npm install'
+                bat 'npm run lint'            
             }
         }
          stage('Prettier') {
             steps {
                 echo 'Running Prettier'
-                bat 'npm run api:report'
+                bat 'npm install'
+                bat 'npm run format'
             }
         }
        stage('Test UI') {
             steps {
                 echo 'Execute UI test...'
-                 bat 'npm run ui:report'
+                bat 'npm install'
+                bat 'npm run ui:report'
             }
         }
 
         stage('Test API') {
             steps {
                 echo 'Execute API test...'
+                bat 'npm install'
                 bat 'npm run api:report'
             }
         }
