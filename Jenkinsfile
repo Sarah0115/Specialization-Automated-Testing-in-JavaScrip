@@ -1,48 +1,36 @@
 pipeline {
     agent any
-
+     tools {
+            nodejs 'Node20'
+    }
     triggers {
         cron('H */2 * * *')
     }
-
-    stages {
-           
+    stages{
         stage('Linter') {
             steps {
                 echo 'Running ESlint'
-                bat '''
-                        npm install
-                        npm run lint
-                    '''
+                bat 'npm run install'
+                bat 'npm run run lint'            
             }
         }
          stage('Prettier') {
             steps {
                 echo 'Running Prettier'
-                bat '''
-                        npm install
-                        npm run format
-                    '''
+                bat 'npm run api:report'
             }
         }
-    
-        stage('Test UI') {
+       stage('Test UI') {
             steps {
                 echo 'Execute UI test...'
-                bat '''
-                    npm install
-                    npm run ui:report
-                '''
+                 bat 'npm run ui:report'
             }
         }
 
         stage('Test API') {
             steps {
                 echo 'Execute API test...'
-                bat '''
-                    npm install
-                    npm run api:report
-                '''
+                bat 'npm run api:report'
             }
         }
     }
@@ -53,10 +41,6 @@ pipeline {
         }
         failure {
             echo 'Error.'
-        }
-        always {
-            echo 'Workspace wiping out...'
-            cleanWs()
         }
     }
 }
