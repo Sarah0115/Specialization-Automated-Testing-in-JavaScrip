@@ -1,5 +1,3 @@
-# FILE: test/ui/cucumber/features/search.feature
-
 @ui @search
 Feature: Product Search
 

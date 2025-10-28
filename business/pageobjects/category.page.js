@@ -21,18 +21,23 @@ class CategoryPage extends Page {
         return $('span[aria-label="category"]');
     }
 
-    async selectHammerCategory() {
+    async waitForCategories() {
         await this.waitForShow(this.categoriesElement);
-        await this.hammerCheckbox.click();
-
-        await browser.waitUntil(
-            async () => await this.hammerCheckbox.isSelected(),
-            {
-                timeout: 5000,
-                timeoutMsg: 'Checkbox was not selected within 5s',
-            }
-        );
     }
+    async selectCategory(categoryName) {
+    const label = await $(`label*=${categoryName}`);
+    const checkbox = await label.$('input[type="checkbox"]');
+    await checkbox.click();
+
+    await browser.waitUntil(
+        async () => await checkbox.isSelected(),
+        {
+            timeout: 5000,
+            timeoutMsg: `Checkbox ${categoryName} was not selected`,
+        }
+    );
+}
+
     async openFirstFilteredProduct() {
         await this.firstElementCategory.click();
     }

@@ -2,8 +2,8 @@ import { Given, When, Then } from '@wdio/cucumber-framework';
 import { expect } from 'chai';
 import SearchPage from '../../../../business/pageobjects/search.page';
 
-console.log('✅ Search steps loaded');
 Given('the user is on the homepage', async () => {
+    console.log('🟡 Inside Given — running step!');
     await SearchPage.open('/');
 });
 
@@ -15,4 +15,3 @@ Then('a message {string} should be displayed', async (expectedMessage) => {
     const message = await SearchPage.getNoResultsMessage();
     expect(message).to.equal(expectedMessage);
 });
-console.log('✅ Search steps loaded');
