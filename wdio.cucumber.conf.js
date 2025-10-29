@@ -1,7 +1,4 @@
-const { ReportAggregator } = require('wdio-html-nice-reporter');
-
-let reportAggregator; // ⬅️ variable global para usar en onPrepare y onComplete
-
+import { ReportAggregator } from '@rpii/wdio-html-reporter';
 exports.config = {
     //
     // ====================
@@ -24,8 +21,7 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: ['./test/specs/**/*.js'],
-    //, './test/api/**/*.spec.js'
+    specs: ['./test/ui/cucumber/features/**/*.feature'],
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -134,7 +130,7 @@ exports.config = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
-    framework: 'mocha',
+    framework: 'cucumber',
 
     //
     // The number of times to retry the entire specfile when it fails as a whole
@@ -162,25 +158,24 @@ exports.config = {
             },
         ],
         [
-            'html-nice',
+            '@rpii/wdio-html-reporter',
             {
+                debug: true,
                 outputDir: './reports/html-reports/',
                 filename: 'report.html',
-                reportTitle: 'E2E Test Report',
-                linkScreenshots: true,
-                showInBrowser: true,
-                collapseTests: false,
-                removeOutput: true,
-                useOnAfterCommandForScreenshot: true,
+                reportTitle: 'E2E Cucumber Report',
+                showInBrowser: false,
+                collapseTests: true,
+                removeOutput: false,
             },
         ],
     ],
 
-    // Options to be passed to Mocha.
-    // See the full list at http://mochajs.org/
-    mochaOpts: {
-        ui: 'bdd',
+    // Options to be passed to Cucumber.
+    cucumberOpts: {
+        require: ['test/ui/cucumber/steps/**/*.js'],
         timeout: 60000,
+        format: ['json:./reports/html-reports/json/cucumber_report.json'],
     },
 
     //
@@ -197,17 +192,7 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      */
     // 💡 Necesario para crear el HTML final (master report)
-    onPrepare: function () {
-        reportAggregator = new ReportAggregator({
-            outputDir: './reports/html-reports/',
-            filename: 'master-report.html', // nombre del HTML final
-            reportTitle: 'Master Report',
-            collapseTests: true,
-        });
-
-        // Limpia artefactos previos
-        reportAggregator.clean();
-    },
+    //  onPrepare: function () {}
 
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -302,6 +287,15 @@ exports.config = {
      */
     // afterSuite: function (suite) {
     // },
+    afterStep: async function ({ passed }) {
+        if (!passed) {
+            const timestamp = new Date().toISOString().replace(/:/g, '-');
+            await browser.saveScreenshot(
+                `./reports/html-reports/screenshots/error-${timestamp}.png`
+            );
+        }
+    },
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {string} commandName hook command name
@@ -336,16 +330,24 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    onComplete: async function () {
-        try {
-            await reportAggregator.createReport();
-            console.log(
-                '✅ HTML Nice Report generado en: reports/html-reports/master-report.html'
-            );
-        } catch (err) {
-            console.error('❌ Error generando el HTML Nice Report:', err);
-            throw err;
-        }
+    onComplete: async function (exitCode, config, capabilities) {
+        const reportAggregator = new ReportAggregator({
+            outputDir: './reports/html-reports/',
+            filename: 'cucumber-report.html',
+            reportTitle: 'E2E Cucumber Test Report',
+            browserName:
+                (capabilities &&
+                    capabilities[0] &&
+                    capabilities[0].browserName) ||
+                'chrome',
+            jsonFilePath: './reports/html-reports/cucumber-report.json',
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await reportAggregator.createReport({
+            config,
+            capabilities,
+        });
     },
     /**
      * Gets executed when a refresh happens.

@@ -17,11 +17,13 @@ class SortPage extends Page {
     get productPrices() {
         return $$('[data-test="product-price"]');
     }
-
-    async sortByPriceAscending() {
+    
+    async openSortMenu() {
         await this.sortDropdown.click();
-        await this.sortAscendingOption.click();
+    }
 
+    async chooseSortOption() {
+       await this.sortAscendingOption.click();
         await browser.waitUntil(
             async () => {
                 const attrValue =
@@ -33,6 +35,7 @@ class SortPage extends Page {
                 timeoutMsg: 'Sorting did not complete within timeout',
             }
         );
+
     }
 
     async getProductPrices() {

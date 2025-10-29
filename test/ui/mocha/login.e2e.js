@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const LoginPage = require('../../business/pageobjects/login.page');
+const LoginPage = require('../../../business/pageobjects/login.page');
 
 describe('Login Page', () => {
     before(async () => {

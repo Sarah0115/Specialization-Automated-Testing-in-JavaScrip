@@ -1,4 +1,4 @@
-const BasketPage = require('../../business/pageobjects/basket.page');
+const BasketPage = require('../../../business/pageobjects/basket.page');
 const { expect } = require('chai');
 
 describe('Basket Functionality', () => {

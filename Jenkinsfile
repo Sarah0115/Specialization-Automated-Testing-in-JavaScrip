@@ -33,6 +33,14 @@ pipeline {
                 bat 'npm run api:report'
             }
         }
+
+        stage('Test UI Cucumber') {
+            steps {
+                echo 'Execute UI test...'
+                bat 'npm run test:ui:cucumber'
+                
+            }
+        }
     }
 
     post {

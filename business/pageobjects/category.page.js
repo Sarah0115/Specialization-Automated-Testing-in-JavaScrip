@@ -21,18 +21,45 @@ class CategoryPage extends Page {
         return $('span[aria-label="category"]');
     }
 
-    async selectHammerCategory() {
+    async waitForCategories() {
         await this.waitForShow(this.categoriesElement);
-        await this.hammerCheckbox.click();
+    }
+    async selectCategory(categoryName) {
+        const label = await $(`label*=${categoryName}`);
+        const checkbox = await label.$('input[type="checkbox"]');
+        await checkbox.click();
 
+        await browser.waitUntil(async () => await checkbox.isSelected(), {
+            timeout: 5000,
+            timeoutMsg: `Checkbox ${categoryName} was not selected`,
+        });
+    }
+
+    async getFilteredProductNames() {
         await browser.waitUntil(
-            async () => await this.hammerCheckbox.isSelected(),
+            async () => {
+                const elems = await $$(
+                    'div[data-test="filter_completed"] a.card h5[data-test="product-name"]'
+                );
+                return elems.length > 0;
+            },
             {
                 timeout: 5000,
-                timeoutMsg: 'Checkbox was not selected within 5s',
+                timeoutMsg: 'Filtered products did not load in time',
             }
         );
+
+        const productElements = await $$(
+            'div[data-test="filter_completed"] a.card h5[data-test="product-name"]'
+        );
+        const names = [];
+        for (const el of productElements) {
+            const text = await el.getText();
+            names.push(text.trim().toLowerCase());
+        }
+        return names;
     }
+
     async openFirstFilteredProduct() {
         await this.firstElementCategory.click();
     }
