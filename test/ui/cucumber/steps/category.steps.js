@@ -1,6 +1,6 @@
-import { When, Then } from '@wdio/cucumber-framework';
-import { expect } from 'chai';
-import categoryPage from '../../../../business/pageobjects/category.page';
+const { When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const categoryPage = require('../../../../business/pageobjects/category.page');
 
 When('the categories menu is displayed', async () => {
     await categoryPage.waitForCategories();

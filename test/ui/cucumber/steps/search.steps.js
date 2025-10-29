@@ -1,6 +1,6 @@
-import { Given, When, Then } from '@wdio/cucumber-framework';
-import { expect } from 'chai';
-import SearchPage from '../../../../business/pageobjects/search.page';
+const { Given, When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const SearchPage = require('../../../../business/pageobjects/search.page');
 
 Given('the user is on the homepage', async () => {
     await SearchPage.open('/');

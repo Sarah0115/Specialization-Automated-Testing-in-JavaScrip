@@ -1,6 +1,6 @@
-import { When, Then } from '@wdio/cucumber-framework';
-import { expect } from 'chai';
-import ProductPage from '../../../../business/pageobjects/product.page';
+const { When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const ProductPage = require('../../../../business/pageobjects/product.page');
 
 let productNameFromCard;
 

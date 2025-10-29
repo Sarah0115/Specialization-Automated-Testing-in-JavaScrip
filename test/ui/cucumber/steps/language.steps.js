@@ -1,6 +1,6 @@
-import { When, Then } from '@wdio/cucumber-framework';
-import { expect } from 'chai';
-import LanguagePage from '../../../../business/pageobjects/language.page';
+const { When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const LanguagePage = require('../../../../business/pageobjects/language.page');
 
 When('the user clicks on the language button on the main menu', async () => {
     await LanguagePage.openLanguageMenu();

@@ -1,3 +1,4 @@
+import { ReportAggregator } from '@rpii/wdio-html-reporter';
 exports.config = {
     //
     // ====================
@@ -157,16 +158,15 @@ exports.config = {
             },
         ],
         [
-            'html-nice',
+            '@rpii/wdio-html-reporter',
             {
+                debug: true,
                 outputDir: './reports/html-reports/',
-                filename: 'report-cucumber.html',
-                reportTitle: 'E2E Test Report Cucumber',
-                linkScreenshots: true,
-                showInBrowser: true,
+                filename: 'report.html',
+                reportTitle: 'E2E Cucumber Report',
+                showInBrowser: false,
                 collapseTests: true,
-                removeOutput: true,
-                useOnAfterCommandForScreenshot: false,
+                removeOutput: false,
             },
         ],
     ],
@@ -175,6 +175,7 @@ exports.config = {
     cucumberOpts: {
         require: ['test/ui/cucumber/steps/**/*.js'],
         timeout: 60000,
+        format: ['json:./reports/html-reports/json/cucumber_report.json'],
     },
 
     //
@@ -329,7 +330,25 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
+    onComplete: async function (exitCode, config, capabilities) {
+        const reportAggregator = new ReportAggregator({
+            outputDir: './reports/html-reports/',
+            filename: 'cucumber-report.html',
+            reportTitle: 'E2E Cucumber Test Report',
+            browserName:
+                (capabilities &&
+                    capabilities[0] &&
+                    capabilities[0].browserName) ||
+                'chrome',
+            jsonFilePath: './reports/html-reports/cucumber-report.json',
+        });
 
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await reportAggregator.createReport({
+            config,
+            capabilities,
+        });
+    },
     /**
      * Gets executed when a refresh happens.
      * @param {string} oldSessionId session ID of the old session

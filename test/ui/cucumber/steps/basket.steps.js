@@ -1,6 +1,6 @@
-import { When, Then } from '@wdio/cucumber-framework';
-import { expect } from 'chai';
-import BasketPage from '../../../../business/pageobjects/basket.page';
+const { When, Then } = require('@wdio/cucumber-framework');
+const { expect } = require('chai');
+const BasketPage = require('../../../../business/pageobjects/basket.page');
 
 When('the user opens the first product', async () => {
     await BasketPage.openFirstProduct();
